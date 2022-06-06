@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>QMetaTile Example</title>
+    <title>Map Design</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
@@ -72,8 +72,6 @@
 <body>
     <nav id="menu"></nav>
     <div id='map'></div>
-
-
     <script type="text/javascript">
         mapboxgl.accessToken =
             'pk.eyJ1IjoiamFrb2J6aGFvIiwiYSI6ImNpcms2YWsyMzAwMmtmbG5icTFxZ3ZkdncifQ.P9MBej1xacybKcDN_jehvw';
@@ -84,44 +82,79 @@
             center: [-122.2559435, 47.6002614] // starting center
         });
 
-
-
         map.on('load', () => { //simplifying the function statement: arrow with brackets to define a function
 
-            map.addSource('uw-tiles', {
+            map.addSource('basemap-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/uw/{z}/{x}/{y}.png'
+                    'assets/bmap/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
                 'attribution': 'Map tiles designed by Bo Zhao</a>'
             });
 
-            map.addSource('lgbtq-tiles', {
+            map.addSource('landmark-tiles', {
                 'type': 'raster',
                 'tiles': [
-                    'assets/lgbtq/{z}/{x}/{y}.png'
+                    'assets/marks/{z}/{x}/{y}.png'
                 ],
                 'tileSize': 256,
-                'attribution': 'Map tiles designed by Bo Zhao'
+                'attribution': 'Map tiles designed by Bo Zhao</a>'
+            });
+
+            map.addSource('basemark-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/altmarks/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Bo Zhao</a>'
+            });
+
+            map.addSource('aapi-tiles', {
+                'type': 'raster',
+                'tiles': [
+                    'assets/aapi/{z}/{x}/{y}.png'
+                ],
+                'tileSize': 256,
+                'attribution': 'Map tiles designed by Bo Zhao</a>'
             });
 
             map.addLayer({
-                'id': 'uw',
+                'id': 'Basemap',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
                 },
-                'source': 'uw-tiles'
+                'source': 'basemap-tiles'
             });
 
+
             map.addLayer({
-                'id': 'lgbtq',
+                'id': 'Seattle Landmark Locations',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
                 },
-                'source': 'lgbtq-tiles'
+                'source': 'landmark-tiles'
+            });
+
+            map.addLayer({
+                'id': 'Basemap and Data',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'basemark-tiles'
+            });
+
+            map.addLayer({
+                'id': 'AAPI Heritage Month',
+                'type': 'raster',
+                'layout': {
+                    'visibility': 'none'
+                },
+                'source': 'aapi-tiles'
             });
 
         });
@@ -130,12 +163,12 @@
         // After the last frame rendered before the map enters an "idle" state.
         map.on('idle', () => {
             // If these two layers were not added to the map, abort
-            if (!map.getLayer('uw') || !map.getLayer('lgbtq')) {
+            if (!map.getLayer('Basemap') || !map.getLayer('Seattle Landmark Locations') || !map.getLayer('Basemap and Data') || !map.getLayer('AAPI Heritage Month')) {
                 return;
             }
 
             // Enumerate ids of the layers.
-            const toggleableLayerIds = ['uw', 'lgbtq'];
+            const toggleableLayerIds = ['Basemap', 'Seattle Landmark Locations', 'Basemap and Data', 'AAPI Heritage Month'];
 
             // Set up the corresponding toggle button for each layer.
             for (const id of toggleableLayerIds) {
